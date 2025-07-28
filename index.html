@@ -3,96 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>情侣生活助手 - 账户版</title>
+    <title>My Hui - 高级版</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Pacifico&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Noto Sans SC', sans-serif; }
-        .tab-button.active { border-bottom-color: #ec4899; color: #ec4899; font-weight: 600; }
+        body { font-family: 'Noto Sans SC', sans-serif; background-color: #f9fafb; /* bg-gray-50 */ }
+        .font-artistic { font-family: 'Pacifico', cursive; }
         .view { display: none; }
         .view.active { display: block; }
         .form-switch-link { color: #ec4899; cursor: pointer; }
         .form-switch-link:hover { text-decoration: underline; }
         .todo-item:hover .delete-btn { opacity: 1; }
         .anniversary-card:hover .delete-anniversary-btn { opacity: 1; }
-        button:disabled { opacity: 0.7; cursor: not-allowed; }
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
+        
+        /* iOS Style Segmented Control */
+        .segmented-control {
+            display: flex;
+            padding: 4px;
+            background-color: #e5e7eb; /* bg-gray-200 */
+            border-radius: 0.75rem; /* rounded-xl */
+        }
+        .segmented-control .tab-button {
+            flex: 1;
+            padding: 8px 0;
+            border-radius: 0.5rem; /* rounded-lg */
+            font-weight: 500;
+            color: #4b5563; /* text-gray-600 */
+            transition: all 0.2s ease-in-out;
+        }
+        .segmented-control .tab-button.active {
+            background-color: white;
+            color: #1f2937; /* text-gray-800 */
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        }
+        .input-with-icon {
+            position: relative;
+        }
+        .input-with-icon svg {
+            position: absolute;
+            left: 0.75rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af; /* text-gray-400 */
+        }
+        .input-with-icon input {
+            padding-left: 2.5rem;
+        }
     </style>
 </head>
-<body class="bg-gray-50 text-gray-800 antialiased">
+<body class="antialiased">
 
-    <div id="app-container" class="container mx-auto max-w-4xl p-4 sm:p-6">
-        <div id="loading-view" class="view active text-center mt-20">
-            <p>正在加载...</p>
+    <div id="app-container" class="min-h-screen">
+        <div id="loading-view" class="view active text-center mt-20 p-4">
+            <p class="text-gray-500">正在连接服务器...</p>
         </div>
 
         <!-- 认证视图 (登录/注册) -->
         <div id="auth-view" class="view">
-            <div class="max-w-md mx-auto bg-white p-8 rounded-2xl shadow-lg mt-10">
-                <h1 class="text-3xl font-bold text-pink-500 mb-2 text-center">默契助手</h1>
-                <!-- 登录表单 -->
-                <form id="login-form" class="space-y-4">
-                    <p class="text-gray-500 text-center">请登录以继续</p>
+            <div class="flex min-h-screen">
+                <!-- 左侧品牌展示 -->
+                <div class="hidden md:flex md:w-1/2 bg-gradient-to-tr from-pink-500 to-rose-400 items-center justify-center p-12 text-white text-center">
                     <div>
-                        <label for="login-email" class="block text-sm font-medium text-gray-700">邮箱</label>
-                        <input type="email" id="login-email" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500">
+                        <h1 class="font-artistic text-7xl leading-tight">My Hui</h1>
+                        <p class="mt-4 text-lg opacity-80">属于你们的私密空间</p>
                     </div>
-                    <div>
-                        <label for="login-password" class="block text-sm font-medium text-gray-700">密码</label>
-                        <input type="password" id="login-password" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500">
+                </div>
+                <!-- 右侧表单 -->
+                <div class="w-full md:w-1/2 flex items-center justify-center p-6 sm:p-12 bg-white">
+                    <div class="w-full max-w-md">
+                        <h1 class="font-artistic text-5xl text-pink-500 mb-4 text-center md:hidden">My Hui</h1>
+                        <!-- 登录表单 -->
+                        <form id="login-form" class="space-y-4">
+                            <h2 class="text-2xl font-bold text-gray-800">欢迎回来</h2>
+                            <p class="text-gray-500">请登录以继续</p>
+                            <div class="input-with-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.803V4.697l-5.803 3.558Z"/></svg>
+                                <input type="email" id="login-email" required placeholder="邮箱" class="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                            </div>
+                            <div class="input-with-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/></svg>
+                                <input type="password" id="login-password" required placeholder="密码" class="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                            </div>
+                            <button type="submit" id="login-btn" class="w-full bg-pink-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-pink-600 transition shadow-md">登录</button>
+                            <p class="text-center text-sm text-gray-600">还没有账户？ <span id="show-register-link" class="form-switch-link">立即注册</span></p>
+                        </form>
+                        <!-- 注册表单 (默认隐藏) -->
+                        <form id="register-form" class="hidden space-y-4">
+                            <h2 class="text-2xl font-bold text-gray-800">创建账户</h2>
+                            <p class="text-gray-500">开启你们的专属空间</p>
+                            <div class="input-with-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M.05 3.555A2 2 0 0 1 2 2h12a2 2 0 0 1 1.95 1.555L8 8.414.05 3.555ZM0 4.697v7.104l5.803-3.558L0 4.697ZM6.761 8.83l-6.57 4.027A2 2 0 0 0 2 14h12a2 2 0 0 0 1.808-1.144l-6.57-4.027L8 9.586l-1.239-.757Zm3.436-.586L16 11.803V4.697l-5.803 3.558Z"/></svg>
+                                <input type="email" id="register-email" required placeholder="邮箱" class="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                            </div>
+                            <div class="input-with-icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/></svg>
+                                <input type="password" id="register-password" required minlength="6" placeholder="密码 (至少6位)" class="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent">
+                            </div>
+                            <button type="submit" id="register-btn" class="w-full bg-blue-500 text-white font-bold py-3 px-4 rounded-lg hover:bg-blue-600 transition shadow-md">注册</button>
+                            <p class="text-center text-sm text-gray-600">已有账户？ <span id="show-login-link" class="form-switch-link">返回登录</span></p>
+                        </form>
                     </div>
-                    <button type="submit" id="login-btn" class="w-full bg-pink-500 text-white font-bold py-2.5 px-4 rounded-lg hover:bg-pink-600 transition shadow-md">登录</button>
-                    <p class="text-center text-sm text-gray-600">还没有账户？ <span id="show-register-link" class="form-switch-link">立即注册</span></p>
-                </form>
-                <!-- 注册表单 (默认隐藏) -->
-                <form id="register-form" class="hidden space-y-4">
-                     <p class="text-gray-500 text-center">创建您的专属账户</p>
-                    <div>
-                        <label for="register-email" class="block text-sm font-medium text-gray-700">邮箱</label>
-                        <input type="email" id="register-email" required class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500">
-                    </div>
-                    <div>
-                        <label for="register-password" class="block text-sm font-medium text-gray-700">密码 (至少6位)</label>
-                        <input type="password" id="register-password" required minlength="6" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500">
-                    </div>
-                    <button type="submit" id="register-btn" class="w-full bg-blue-500 text-white font-bold py-2.5 px-4 rounded-lg hover:bg-blue-600 transition shadow-md">注册</button>
-                    <p class="text-center text-sm text-gray-600">已有账户？ <span id="show-login-link" class="form-switch-link">返回登录</span></p>
-                </form>
+                </div>
             </div>
         </div>
 
         <!-- 伴侣连接视图 -->
-        <div id="partner-view" class="view">
-             <div class="max-w-md mx-auto text-center bg-white p-8 rounded-2xl shadow-lg mt-10 sm:mt-20">
+        <div id="partner-view" class="view p-4">
+             <div class="max-w-md mx-auto text-center bg-white p-8 rounded-2xl shadow-sm mt-10 sm:mt-20">
                 <h1 class="text-2xl font-bold text-pink-500 mb-2">还差一步</h1>
                 <p id="user-email-display" class="text-gray-500 mb-6">已登录: </p>
                 <div class="mb-6 text-left">
                     <label for="partner-email-input" class="block text-sm font-medium text-gray-700 mb-1">请输入伴侣的注册邮箱</label>
-                    <input type="email" id="partner-email-input" class="w-full p-2 border border-gray-300 rounded-lg" placeholder="partner@example.com">
+                    <input type="email" id="partner-email-input" class="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent" placeholder="partner@example.com">
                 </div>
                 <button id="connect-partner-btn" class="w-full bg-pink-500 text-white font-bold py-2.5 px-4 rounded-lg hover:bg-pink-600 transition shadow-md">绑定伴侣</button>
-                 <button id="logout-btn-partner-view" class="mt-4 text-sm text-gray-500 hover:text-red-500 underline">退出登录</button>
+                 <button id="logout-btn-partner-view" class="mt-4 text-sm text-gray-500 hover:text-red-500">退出登录</button>
             </div>
         </div>
 
         <!-- 主应用视图 -->
         <div id="main-app-view" class="view">
-            <header class="flex flex-wrap justify-between items-center mb-6 border-b border-gray-200 pb-4 gap-2">
-                <h1 class="text-2xl font-bold text-pink-500">默契助手</h1>
-                <div>
-                    <span id="main-user-email" class="text-sm text-gray-500 mr-4"></span>
-                    <button id="logout-btn-main-view" class="text-sm text-gray-500 hover:text-red-500 underline">退出登录</button>
+            <header class="sticky top-0 z-10 bg-gray-50/80 backdrop-blur-lg border-b border-gray-200/80">
+                <div class="container mx-auto max-w-4xl p-4 flex justify-between items-center">
+                    <h1 class="font-artistic text-3xl text-pink-500">My Hui</h1>
+                    <div>
+                        <span id="main-user-email" class="hidden sm:inline text-sm text-gray-500 mr-4"></span>
+                        <button id="logout-btn-main-view" class="text-sm text-gray-500 hover:text-red-500">退出登录</button>
+                    </div>
                 </div>
             </header>
-            <div class="border-b border-gray-200 mb-6">
-                <nav class="-mb-px flex space-x-6" aria-label="Tabs">
-                    <button id="tab-todos" class="tab-button active whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700">共享清单</button>
-                    <button id="tab-anniversaries" class="tab-button whitespace-nowrap py-3 px-1 border-b-2 font-medium text-sm border-transparent text-gray-500 hover:text-gray-700">纪念日</button>
-                </nav>
-            </div>
-            <div id="content-todos"></div>
-            <div id="content-anniversaries" class="hidden"></div>
+            <main class="p-4">
+                <div class="max-w-2xl mx-auto">
+                    <div class="segmented-control mb-6">
+                        <button id="tab-todos" class="tab-button active">共享清单</button>
+                        <button id="tab-anniversaries" class="tab-button">纪念日</button>
+                    </div>
+                </div>
+                <div id="content-todos"></div>
+                <div id="content-anniversaries" class="hidden"></div>
+            </main>
         </div>
         
         <!-- 全局消息提示 -->
@@ -220,45 +272,117 @@
         }
 
         function renderTodos(todos, sharedDocId) {
-            const sortedTodos = [...(todos || [])].sort((a,b) => (a.createdAt?.seconds || 0) - (b.createdAt?.seconds || 0));
+            const pendingTodos = todos.filter(t => !t.completed).sort((a,b) => (a.createdAt?.seconds || 0) - (b.createdAt?.seconds || 0));
+            const completedTodos = todos.filter(t => t.completed).sort((a,b) => (a.createdAt?.seconds || 0) - (b.createdAt?.seconds || 0));
+            
+            const progress = todos.length > 0 ? (completedTodos.length / todos.length) * 100 : 0;
+
             contentTodos.innerHTML = `
-                <div class="bg-white p-6 rounded-xl shadow-lg">
-                    <form id="add-todo-form" class="flex gap-2 mb-4">
-                        <input type="text" id="todo-input" class="flex-grow p-2 border rounded-lg focus:ring-2 focus:ring-pink-400 focus:border-transparent" placeholder="添加新的待办..." required>
-                        <button type="submit" class="bg-blue-500 text-white px-4 rounded-lg hover:bg-blue-600 transition-colors">添加</button>
+                <div class="space-y-6 max-w-2xl mx-auto">
+                    <!-- 进度概览 -->
+                    <div class="bg-white p-4 rounded-xl shadow-sm">
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="font-semibold text-gray-700">任务进度</h3>
+                            <span class="text-sm font-medium text-pink-500">${completedTodos.length} / ${todos.length}</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-pink-500 h-2.5 rounded-full" style="width: ${progress}%"></div>
+                        </div>
+                    </div>
+
+                    <!-- 添加任务 -->
+                    <form id="add-todo-form" class="flex gap-3">
+                        <input type="text" id="todo-input" class="flex-grow p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-pink-400 focus:border-transparent" placeholder="添加新的待办事项..." required>
+                        <button type="submit" class="bg-pink-500 text-white px-5 rounded-lg hover:bg-pink-600 transition-colors font-semibold">添加</button>
                     </form>
-                    <ul id="todo-list" class="space-y-2"></ul>
+
+                    <!-- 待办列表 -->
+                    <div id="pending-todos-container"></div>
+                    <!-- 已完成列表 -->
+                    <div id="completed-todos-container"></div>
                 </div>`;
-            const listEl = document.getElementById('todo-list');
-            if (sortedTodos.length === 0) {
-                listEl.innerHTML = `<li class="text-center text-gray-400 py-4">清单是空的，太棒了！</li>`;
-            } else {
-                listEl.innerHTML = sortedTodos.map(todo => `
-                    <li class="todo-item flex items-center p-3 rounded-lg hover:bg-gray-50 transition-colors">
-                        <input type="checkbox" data-id="${todo.id}" class="h-5 w-5 rounded border-gray-300 text-pink-500 focus:ring-pink-500 cursor-pointer" ${todo.completed ? 'checked' : ''}>
-                        <span class="ml-3 ${todo.completed ? 'line-through text-gray-400' : ''}">${escapeHtml(todo.text)}</span>
-                        <button data-id="${todo.id}" class="delete-btn ml-auto text-gray-400 hover:text-red-500 opacity-0 transition-opacity p-1 rounded-full">删除</button>
-                    </li>`).join('');
+
+            const pendingContainer = document.getElementById('pending-todos-container');
+            if(pendingTodos.length > 0) {
+                pendingContainer.innerHTML = `
+                    <h3 class="font-semibold text-gray-800 mb-2">待办事项</h3>
+                    <ul class="bg-white rounded-xl shadow-sm divide-y divide-gray-100">${pendingTodos.map(renderTodoItem).join('')}</ul>`;
             }
+
+            const completedContainer = document.getElementById('completed-todos-container');
+            if(completedTodos.length > 0) {
+                completedContainer.innerHTML = `
+                    <h3 class="font-semibold text-gray-800 mb-2">已完成</h3>
+                    <ul class="bg-white rounded-xl shadow-sm divide-y divide-gray-100">${completedTodos.map(renderTodoItem).join('')}</ul>`;
+            }
+
             document.getElementById('add-todo-form').addEventListener('submit', (e) => handleAddTodo(e, sharedDocId, todos));
-            listEl.querySelectorAll('input[type="checkbox"]').forEach(el => el.addEventListener('change', (e) => handleToggleTodo(e, sharedDocId, todos)));
-            listEl.querySelectorAll('.delete-btn').forEach(el => el.addEventListener('click', (e) => handleDeleteTodo(e, sharedDocId, todos)));
+            document.querySelectorAll('input[type="checkbox"]').forEach(el => el.addEventListener('change', (e) => handleToggleTodo(e, sharedDocId, todos)));
+            document.querySelectorAll('.delete-btn').forEach(el => el.addEventListener('click', (e) => handleDeleteTodo(e, sharedDocId, todos)));
+        }
+        
+        function renderTodoItem(todo) {
+            const createdAt = new Date((todo.createdAt?.seconds || 0) * 1000).toLocaleDateString('zh-CN', { month: 'long', day: 'numeric' });
+            return `
+                <li class="todo-item flex items-center p-3 transition-colors">
+                    <input type="checkbox" data-id="${todo.id}" class="h-5 w-5 rounded-full border-gray-300 text-pink-500 focus:ring-pink-500 cursor-pointer" ${todo.completed ? 'checked' : ''}>
+                    <div class="ml-4 flex-grow">
+                        <span class="text-gray-800 ${todo.completed ? 'line-through text-gray-400' : ''}">${escapeHtml(todo.text)}</span>
+                        <p class="text-xs text-gray-400">${createdAt} 创建</p>
+                    </div>
+                    <button data-id="${todo.id}" class="delete-btn ml-auto text-gray-400 hover:text-red-500 opacity-0 transition-opacity p-2 rounded-full hover:bg-gray-100">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                    </button>
+                </li>`;
         }
         
         function renderAnniversaries(anniversaries, sharedDocId) {
-            const sortedAnni = [...(anniversaries || [])].sort((a,b) => (a.date?.seconds || 0) - (b.date?.seconds || 0));
+            const today = new Date(); today.setHours(0,0,0,0);
+            const upcomingAnni = anniversaries.filter(a => new Date(a.date.seconds * 1000) >= today).sort((a,b) => (a.date?.seconds || 0) - (b.date?.seconds || 0));
+            const pastAnni = anniversaries.filter(a => new Date(a.date.seconds * 1000) < today).sort((a,b) => (b.date?.seconds || 0) - (a.date?.seconds || 0));
+
             contentAnniversaries.innerHTML = `
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    ${sortedAnni.map(renderAnniversaryCard).join('')}
-                    <div class="bg-white p-6 rounded-xl shadow-lg border-2 border-dashed border-gray-300">
-                        <h3 class="font-bold mb-2 text-gray-700">添加新的纪念日</h3>
-                        <form id="add-anniversary-form" class="space-y-3">
-                            <input type="text" id="anniversary-title" class="w-full p-2 border rounded-lg" placeholder="标题，如：生日" required>
-                            <input type="date" id="anniversary-date" class="w-full p-2 border rounded-lg" required>
-                            <button type="submit" class="w-full bg-green-500 text-white py-2 rounded-lg hover:bg-green-600 transition-colors">添加纪念日</button>
+                <div class="space-y-8 max-w-4xl mx-auto">
+                    <!-- 添加纪念日 -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm">
+                        <h3 class="font-semibold mb-3 text-gray-800">添加新的纪念日</h3>
+                        <form id="add-anniversary-form" class="grid grid-cols-1 sm:grid-cols-3 gap-4 items-end">
+                            <div class="sm:col-span-2">
+                                <label for="anniversary-title" class="block text-sm font-medium text-gray-600">标题</label>
+                                <input type="text" id="anniversary-title" class="mt-1 w-full p-2 border border-gray-300 rounded-lg" placeholder="例如：我们的纪念日" required>
+                            </div>
+                            <div>
+                                <label for="anniversary-date" class="block text-sm font-medium text-gray-600">日期</label>
+                                <input type="date" id="anniversary-date" class="mt-1 w-full p-2 border border-gray-300 rounded-lg" required>
+                            </div>
+                            <button type="submit" class="sm:col-span-3 w-full bg-green-500 text-white py-2.5 rounded-lg hover:bg-green-600 transition-colors font-semibold">添加纪念日</button>
                         </form>
                     </div>
+                    
+                    <!-- 即将到来 -->
+                    <div id="upcoming-anniversaries-container"></div>
+                    <!-- 已经历 -->
+                    <div id="past-anniversaries-container"></div>
                 </div>`;
+            
+            const upcomingContainer = document.getElementById('upcoming-anniversaries-container');
+            if(upcomingAnni.length > 0) {
+                upcomingContainer.innerHTML = `
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-3 text-xl">即将到来</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">${upcomingAnni.map(renderAnniversaryCard).join('')}</div>
+                    </div>`;
+            }
+
+            const pastContainer = document.getElementById('past-anniversaries-container');
+            if(pastAnni.length > 0) {
+                pastContainer.innerHTML = `
+                    <div>
+                        <h3 class="font-semibold text-gray-800 mb-3 text-xl">已经历</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">${pastAnni.map(renderAnniversaryCard).join('')}</div>
+                    </div>`;
+            }
+
             document.getElementById('add-anniversary-form').addEventListener('submit', (e) => handleAddAnniversary(e, sharedDocId, anniversaries));
             document.querySelectorAll('.delete-anniversary-btn').forEach(btn => btn.addEventListener('click', (e) => handleDeleteAnniversary(e, sharedDocId, anniversaries)));
         }
@@ -269,15 +393,22 @@
             const daysDiff = Math.ceil((date - today) / (1000 * 60 * 60 * 24));
             
             let diffText, colorClass;
-            if (daysDiff > 0) { diffText = `<span class="font-bold">${daysDiff}</span> 天后`; colorClass = 'text-pink-500'; } 
+            if (daysDiff > 0) { diffText = `<span class="font-bold">${daysDiff}</span> 天`; colorClass = 'text-pink-500'; } 
             else if (daysDiff === 0) { diffText = `就是今天!`; colorClass = 'text-yellow-500 font-bold'; } 
-            else { diffText = `已过 <span class="font-bold">${-daysDiff}</span> 天`; colorClass = 'text-gray-400'; }
+            else { diffText = `已过 ${-daysDiff} 天`; colorClass = 'text-gray-400'; }
 
-            return `<div class="anniversary-card bg-white p-6 rounded-xl shadow-lg relative transition-shadow hover:shadow-xl">
-                    <button data-id="${ann.id}" class="delete-anniversary-btn absolute top-2 right-2 text-gray-300 hover:text-red-500 text-xs opacity-0 transition-opacity p-1 rounded-full">删除</button>
-                    <h3 class="font-bold text-lg">${escapeHtml(ann.title)}</h3>
-                    <p class="text-gray-500 text-sm">${date.toLocaleDateString()}</p>
-                    <p class="text-2xl mt-2 ${colorClass}">${diffText}</p></div>`;
+            return `<div class="anniversary-card bg-white p-6 rounded-xl shadow-sm relative transition-shadow hover:shadow-md">
+                    <button data-id="${ann.id}" class="delete-anniversary-btn absolute top-3 right-3 text-gray-300 hover:text-red-500 text-xs opacity-0 transition-opacity p-1 rounded-full">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                    </button>
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <h3 class="font-bold text-lg text-gray-800">${escapeHtml(ann.title)}</h3>
+                            <p class="text-gray-500 text-sm">${date.getFullYear()}年${date.getMonth()+1}月${date.getDate()}日</p>
+                        </div>
+                        <p class="text-3xl ${colorClass} text-right leading-tight">${diffText}</p>
+                    </div>
+                </div>`;
         }
         
         // --- 事件处理函数 ---
@@ -341,6 +472,3 @@
     </script>
 </body>
 </html>
-```
-
-完成之后，您就可以回到我们之前讨论的**“网站部署上线指南”**，从头开始执行里面的步骤，将这个最终版的 `index.html` 文件发布到互联网上，获得一个真实的网
